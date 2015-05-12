@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
   <link rel="stylesheet" href="assets/css/amazeui.min.css">
   <link rel="stylesheet" href="assets/css/app.css">
   <script src="assets/js/jquery.min.js"></script>
@@ -13,33 +12,37 @@
   <script src="assets/js/app.js"></script>
 </head>
 <body>
-
   <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
     <div class="am-header-left am-header-nav">
-      <a href="#left-link" class="">
+      <a href="javascript:history.back();" class="">
         <i class="am-header-icon am-icon-chevron-left"></i>
       </a>
     </div>
     <h1 class="am-header-title">
-      <a href="#title-link">登录</a>
+      <a href="#title-link">回复</a>
     </h1>
+    <div class="am-header-right am-header-nav">
+      <a href="javascript:$('#post-feed-form').submit();" class="">
+        <i class="am-header-icon am-icon-send-o"></i>
+      </a>
+    </div>
   </header>
 
-
   <div class="am-container am-margin-top">
-    <form class="am-form" id="login-form" onsubmit="return Login.onSubmit();">
+    <form class="am-form" id="feed-reply-form" onsubmit="return feedReplyController.onSubmit();">
+      <input type="hidden" name="feed_id" id="feed-reply-id">
       <div class="am-form-group">
-        <label for="login-username">用户名</label>
-        <input type="text" class="" id="login-username" name="username" placeholder="用户名">
-      </div>
-      <div class="am-form-group">
-        <label for="login-password">密码</label>
-        <input type="password" class="" id="login-password" name="password" placeholder="密码">
-      </div>
-      <div class="am-form-group">
-        <button type="submit" class="am-btn am-btn-primary am-center" id="login-submit" data-am-loading="{loadingText: '登录中'}">登录</button>
+        <label for="doc-ta-1">回复内容</label>
+        <textarea class="" rows="5" id="post-feed-content" name="content" placeholder="发表我观点..."></textarea>
       </div>
     </form>
   </div>
+
+
+  <script>
+    $(function(){
+      feedReplyController = new FeedReplyController();
+    });
+  </script>
 </body>
 </html>

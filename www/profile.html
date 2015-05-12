@@ -3,18 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
   <link rel="stylesheet" href="assets/css/amazeui.min.css">
   <link rel="stylesheet" href="assets/css/app.css">
   <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.form.js"></script>
   <script src="assets/js/amazeui.min.js"></script>
   <script src="assets/js/amazeui.widgets.helper.min.js"></script>
-  <script src="assets/js/handlebars.min.js"></script>
-  
+  <script src="assets/js/app.js"></script>
 </head>
 <body>
-
-  <header data-am-widget="header" class="am-header am-header-default">
+  <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
     <h1 class="am-header-title">
       <a href="#title-link">个人中心</a>
     </h1>
@@ -39,7 +37,18 @@
     </div>
   </div>
 
-
+  <div class="am-btn-group am-btn-group-justify am-padding-horizontal">
+    <button type="button" class="am-btn am-btn-default">
+      999<br>动态
+    </button>
+    <button type="button" class="am-btn am-btn-default">
+      999<br>粉丝
+    </button>
+    <button type="button" class="am-btn am-btn-default">
+      999<br>关注
+    </button>
+  </div>
+  <br>
   <nav data-am-widget="menu" class="am-menu  am-menu-stack">
     <ul class="am-menu-nav am-avg-sm-1">
       <li class=""><a href="##" class="">我的收藏</a></li>
@@ -48,7 +57,7 @@
     </ul>
     <br>
     <ul class="am-menu-nav am-avg-sm-1">
-      <li class=""><a href="login.html" class="">注销</a></li>
+      <li class=""><a href="##" class="" onclick="Profile.onLogout()">注销</a></li>
     </ul>
   </nav>
 
@@ -89,6 +98,10 @@
       </li>
     </ul>
   </div>
-
+  <script>
+    $(function(){
+      Profile.getProfileInfo();
+    });
+  </script>
 </body>
 </html>
