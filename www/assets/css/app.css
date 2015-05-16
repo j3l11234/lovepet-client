@@ -4,16 +4,16 @@
   background: rgb(24, 104, 144);
 }
 
-.feed-header{
+.feed-header, .feed-reply-header{
   /*padding-bottom: .5rem;*/
 }
-.feed-portrait{
+.feed-portrait, .feed-reply-portrait{
   display: inline-block;
   width: 4.5rem;
   height: auto;
   margin-right: .5rem;
 }
-.feed-info{
+.feed-info,.feed-reply-info{
   display: inline-block;
 }
 .feed-thumb{
@@ -21,7 +21,7 @@
   max-height: 10rem;
   margin-bottom: .5rem;
 }
-.feed-content{
+.feed-content, .feed-reply-content{
   margin-bottom: .5rem;
   text-overflow: initial;
   -webkit-line-clamp: initial;

@@ -13,8 +13,13 @@
 </head>
 <body>
   <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+      <a href="javascript:history.back();" class="">
+        <i class="am-header-icon am-icon-chevron-left"></i>
+      </a>
+    </div>
     <h1 class="am-header-title">
-      <a href="#title-link">动态</a>
+      <a href="#title-link">动态详情</a>
     </h1>
     <div class="am-header-right am-header-nav">
       <a href="post_feed.html" class="">
@@ -25,50 +30,26 @@
 
   <div data-am-widget="list_news" class="am-list-news am-list-news-default">
     <div class="am-list-news-bd">
-      <ul class="am-list" id="feed-list">
+      <ul class="am-list" id="feed-detail-list">
+      </ul>
+    </div>
+  </div>
+  <div data-am-widget="list_news" class="am-list-news am-list-news-default">
+    <div class="am-list-news-hd am-cf">
+      <h2>回复列表</h2>
+    </div>
+    <div class="am-list-news-bd">
+      <ul class="am-list" id="feed-reply-list">
       </ul>
     </div>
   </div>
 
 
-  <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default ">
-    <ul class="am-navbar-nav am-cf am-avg-sm-5">
-      <li>
-        <a href="news.html" class="">
-          <span class="am-icon-newspaper-o"></span>
-          <span class="am-navbar-label">资讯</span>
-        </a>
-      </li>
-      <li>
-        <a href="feed.html" class="am-active">
-          <span class="am-icon-pencil"></span>
-          <span class="am-navbar-label">动态</span>
-        </a>
-      </li>
-      <li>
-        <a href="message.html" class="">
-          <span class="am-icon-comment"></span>
-          <span class="am-navbar-label">消息</span>
-        </a>
-      </li>
-      <li>
-        <a href="discover.html" class="">
-          <span class="am-icon-send"></span>
-          <span class="am-navbar-label">发现</span>
-        </a>
-      </li>
-      <li>
-        <a href="profile.html" class="">
-          <span class="am-icon-user"></span>
-          <span class="am-navbar-label">我的</span>
-        </a>
-      </li>
-    </ul>
-  </div>
   <script>
     $(function(){
-      
-      feedController.getFollowFeed();
+      feedDetailController = new FeedDetailController();
+      feedDetailController.showFeed();
+      feedDetailController.showFeedReply();
     });
   </script>
 </body>

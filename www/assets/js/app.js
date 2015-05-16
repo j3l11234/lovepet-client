@@ -58,7 +58,7 @@ Date.prototype.format = function (mask){
   });
 })(jQuery);
 
-document.cookie ='JSESSIONID=36E46075770F065B9B72E60FDC6770DD; Path=/'
+document.cookie ='JSESSIONID=2B49BD9489ED8F93A36D9B3ADDA8C9B5; Path=/'
 //var HOST = 'http://192.168.5.10:8080/lovepet';
 var HOST = 'http://127.0.0.1:8080/lovepet';
 var URL = {
@@ -68,6 +68,9 @@ var URL = {
   feed_postFeed: HOST + '/feed/postFeed',
   feed_getFollowFeed: HOST + '/feed/getFollowFeed',
   feed_replyFeed: HOST + '/feed/replyFeed',
+  feed_getFeedReply : HOST + '/feed/getFeedReply',
+  feed_repostFeed : HOST + '/feed/repostFeed',
+  feed_favFeed : HOST + '/feed/favFeed'
 }
 var RESPOND_CODE = {
   OK : 0,
@@ -231,8 +234,7 @@ function FeedController(){
     '        <div class="am-list-item-text"></div>' +
     '      </div>' +
     '    </div>' +
-    '    <div class="am-list-main am-list-item-text feed-content">' +
-    '    </div>' +
+    '    <div class="am-list-main am-list-item-text feed-content"></div>' +
     '    <img src="" alt="portrait" class="am-img-thumbnail am-radius feed-thumb"/>' +
     '  </div>' +
     '  <div class="am-btn-group am-btn-group-xs am-btn-group-justify">' +
@@ -254,11 +256,15 @@ function FeedController(){
     }
   }
 
+  this.refreshFeed = function(){
+    localStorage.removeItem('feedList');
+    getFollowFeed();
+  }
+
   var getFollowFeed = function(){
     $.ajax({
       type: 'post',
       url: URL.feed_getFollowFeed,
-      data: $('#post-feed-form').serialize(),
       success: function(data,status,jqXHR){
         try{
           setTimeout(function(){
@@ -278,29 +284,78 @@ function FeedController(){
     return false;
   };
 
+  var onDetailClick = function(event){
+    event.stopPropagation();
+    var $feed = $(event.target);
+    if(!$feed.hasClass('am-list-item-desced')){
+      $feed = $(event.target).parentsUntil("#feed-list").slice(-1);
+    }
+
+    var index = $feed.attr('index');
+    localStorage.setItem('feedDetail', JSON.stringify(feedList[index]));
+
+    window.location.href = "feed_detail.html";
+  }
+
   var onReplyClick = function(event){
+    event.stopPropagation();
     var index = $(event.target).parent().parent().attr('index');
     localStorage.setItem('feedReply',feedList[index].id);
     window.location.href = "feed_reply.html";
   }
 
+  var onRepostClick = function(event){
+    event.stopPropagation();
+    var index = $(event.target).parent().parent().attr('index');
+    localStorage.setItem('feedRepost',feedList[index].id);
+    window.location.href = "feed_repost.html";
+  }
+
+  var onFavClick = function(event){
+    event.stopPropagation();
+    var index = $(event.target).parent().parent().attr('index');
+
+    $.ajax({
+      type: 'post',
+      url: URL.feed_favFeed,
+      data: {
+        feed_id: feedList[index].id
+      },
+      success: function(data,status,jqXHR){
+        try{
+          setTimeout(function(){
+            if(data.error == RESPOND_CODE.OK){
+              commonController.showModalAlert('提交成功', data.data);
+          }else{
+            commonController.showModalAlert('提交错误', data.data);
+          }
+        },0);
+        }
+        catch(err){}
+      },
+      error: commonController.ajaxError
+    });
+  }
+  
+
   var renderFeed = function(){
     var $feed_list = $('#feed-list');
+    $feed_list.children().remove();
     var length = feedList.length;
     for (var i = 0 ; i < length; i++){
       var feed = feedList[i];
       var $feed = $feedTpl.clone();
 
       $feed.attr('index', i);
+      $feed.click(onDetailClick);
       var $feed_info = $feed.find('.feed-info');
       $feed_info.find('.am-list-item-hd').text(feed.user.alias);
       $feed_info.find('.am-list-item-text').text(new Date(feed.submitTime).format('yyyy-MM-dd HH:mm:ss'));
       $feed.find('.feed-portrait').attr('src', HOST + feed.user.portrait);
       $feed.find('.feed-content').text(feed.content);
-      var i = i;
       $feed.find('.feed-reply').text('评论' + ' (' + feed.replyNum + ')').click(onReplyClick);
-      $feed.find('.feed-repost').text('转发' + ' (' + feed.repostNum + ')');
-      $feed.find('.feed-favorite').text('赞' + ' (' + feed.favNum + ')');
+      $feed.find('.feed-repost').text('转发' + ' (' + feed.repostNum + ')').click(onRepostClick);
+      $feed.find('.feed-favorite').text('赞' + ' (' + feed.favNum + ')').click(onFavClick);
       if(feed.photo){
         $feed.find('.feed-thumb').attr('src', HOST + feed.photo);
       }else{
@@ -331,13 +386,159 @@ function FeedController(){
 }
 
 
-function FeedReplyController(){
-  var feed = localStorage.getItem('feedReply');
-  if(!feed){
-    history.back();
-  }
-  $('#feed-reply-id').val(feed);
+function FeedDetailController(){
+  var feed = null;
+  var replyList = null;
+  var perPage = 10;
+  
+  var $feedTpl = $('' +
+    '<li class="am-list-item-desced">' +
+    '  <div class="feed-header">' +
+    '    <img src="" alt="portrait" class="am-img-thumbnail am-radius feed-portrait"/>' +
+    '    <div class="feed-info am-text-middle">' +
+    '      <h3 class="am-list-item-hd"></h3>' +
+    '      <div class="am-list-item-text"></div>' +
+    '    </div>' +
+    '  </div>' +
+    '  <div class="am-list-main am-list-item-text feed-content"></div>' +
+    '  <img src="" alt="thumb" class="am-img-thumbnail am-radius feed-thumb"/>' +
+    '  <div class="am-panel am-panel-default feed-origin">' +
+    '    <div class="feed-header">' +
+    '      <img src="" alt="portrait" class="am-img-thumbnail am-radius feed-portrait"/>' +
+    '      <div class="feed-info am-text-middle">' +
+    '        <h3 class="am-list-item-hd"></h3>' +
+    '        <div class="am-list-item-text"></div>' +
+    '      </div>' +
+    '    </div>' +
+    '    <div class="am-list-main am-list-item-text feed-content"></div>' +
+    '    <img src="" alt="portrait" class="am-img-thumbnail am-radius feed-thumb"/>' +
+    '  </div>' +
+    '</li>');
+var $feedReplyTpl = $('' +
+    '<li class="am-list-item-desced">' +
+    '  <div class="feed-reply-header">' +
+    '    <img src="" alt="portrait" class="am-img-thumbnail am-radius feed-reply-portrait"/>' +
+    '    <div class="feed-reply-info am-text-middle">' +
+    '      <h3 class="am-list-item-hd"></h3>' +
+    '      <div class="am-list-item-text"></div>' +
+    '    </div>' +
+    '  </div>' +
+    '  <div class="am-list-main am-list-item-text feed-reply-content"></div>' +
+    '</li>');
 
+  var init = function(){
+    var feedStorage = localStorage.getItem('feedDetail');
+    localStorage.removeItem('feedDetail');
+    if(feedStorage){
+      feed = JSON.parse(feedStorage);
+    }else{
+      history.back();
+    }
+  };
+  init();
+
+  this.showFeed = function(){
+    renderFeed();
+  };
+  this.showFeedReply = function(){
+    getFeedReply();
+  };
+
+  var renderFeed = function(){
+    var $feed_list = $('#feed-detail-list');
+    var $feed = $feedTpl.clone();
+
+    var $feed_info = $feed.find('.feed-info');
+    $feed_info.find('.am-list-item-hd').text(feed.user.alias);
+    $feed_info.find('.am-list-item-text').text(new Date(feed.submitTime).format('yyyy-MM-dd HH:mm:ss'));
+    $feed.find('.feed-portrait').attr('src', HOST + feed.user.portrait);
+    $feed.find('.feed-content').text(feed.content);
+    if(feed.photo){
+      $feed.find('.feed-thumb').attr('src', HOST + feed.photo);
+    }else{
+      $feed.find('.feed-thumb').remove();
+    }
+
+    if(feed.original){
+      var origin_feed = feed.original;
+      var $origin_feed = $feed.find('.feed-origin');
+
+      var $origin_feed_info = $origin_feed.find('.feed-info');
+      $origin_feed_info.find('.am-list-item-hd').text(origin_feed.user.alias);
+      $origin_feed_info.find('.am-list-item-text').text(new Date(origin_feed.submitTime).format('yyyy-MM-dd HH:mm:ss'));
+      $origin_feed.find('.feed-portrait').attr('src', HOST + origin_feed.user.portrait);
+      $origin_feed.find('.feed-content').text(origin_feed.content);
+      if(origin_feed.photo){
+        $origin_feed.find('.feed-thumb').attr('src', HOST + origin_feed.photo);
+      }else{
+        $origin_feed.find('.feed-thumb').remove();
+      }
+    }else{
+      $feed.find('.feed-origin').remove();
+    }
+
+    $feed_list.append($feed);
+
+  };
+
+  var getFeedReply = function(){
+    $.ajax({
+      type: 'post',
+      url: URL.feed_getFeedReply,
+      data: {
+        feed_id: feed.id,
+        per_page: perPage,
+        page: 1
+      },
+      success: function(data,status,jqXHR){
+        try{
+          setTimeout(function(){
+            if(data.error == RESPOND_CODE.OK){
+            replyList = data.data;
+            renderReply();
+          }else{
+            commonController.showModalAlert('获取错误', data.data);
+          }
+        },0);
+        }
+        catch(err){}
+      },
+      error: commonController.ajaxError
+    });
+    return false;
+  };
+
+ var renderReply = function(){
+    var $feed_reply_list = $('#feed-reply-list');
+    var length = replyList.length;
+    for (var i = 0 ; i < length; i++){
+      var reply = replyList[i];
+      var $reply = $feedReplyTpl.clone();
+
+      var $reply_info = $reply.find('.feed-reply-info');
+      $reply_info.find('.am-list-item-hd').text(reply.user.alias);
+      $reply_info.find('.am-list-item-text').text(new Date(reply.submitTime).format('yyyy-MM-dd HH:mm:ss'));
+      $reply.find('.feed-reply-portrait').attr('src', HOST + reply.user.portrait);
+      $reply.find('.feed-reply-content').text(reply.content);
+      $feed_reply_list.append($reply);
+    }
+  };
+}
+
+
+function FeedReplyController(){
+  var feed = null;
+
+  var init = function(){
+    feed = localStorage.getItem('feedReply');
+    localStorage.removeItem('feedReply');
+    if(!feed){
+      history.back();
+    }
+    $('#feed-reply-id').val(feed);
+  };
+  init();
+  
   this.onSubmit = function(){
     $.ajax({
       type: 'post',
@@ -364,6 +565,49 @@ function FeedReplyController(){
     return false;
   };
 }
+
+
+function FeedRepostController(){
+  var feed = null;
+
+  var init = function(){
+    feed = localStorage.getItem('feedRepost');
+    localStorage.removeItem('feedRepost');
+    if(!feed){
+      history.back();
+    }
+    $('#feed-original-id').val(feed);
+  };
+  init();
+  
+  this.onSubmit = function(){
+    $.ajax({
+      type: 'post',
+      url: URL.feed_repostFeed,
+      data: $('#feed-repost-form').serialize(),
+      success: function(data,status,jqXHR){
+        try{
+          setTimeout(function(){
+            if(data.error == RESPOND_CODE.OK){
+              commonController.showModalAlert('提交成功', data.data, function(){
+                localStorage.removeItem('feedList');
+                history.back();
+              });
+            }else{
+              commonController.showModalAlert('提交错误', data.data);
+            }
+          },0);
+        }
+        catch(err){}
+      },
+      error: commonController.ajaxError
+    });
+
+    return false;
+  };
+}
+
+
 
 
 var PostFeed = {

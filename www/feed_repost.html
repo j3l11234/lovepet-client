@@ -22,18 +22,18 @@
       <a href="#title-link">回复</a>
     </h1>
     <div class="am-header-right am-header-nav">
-      <a href="javascript:$('#feed-reply-form').submit();" class="">
+      <a href="javascript:$('#feed-repost-form').submit();" class="">
         <i class="am-header-icon am-icon-send-o"></i>
       </a>
     </div>
   </header>
 
   <div class="am-container am-margin-top">
-    <form class="am-form" id="feed-reply-form" onsubmit="return feedReplyController.onSubmit();">
-      <input type="hidden" name="feed_id" id="feed-reply-id">
+    <form class="am-form" id="feed-repost-form" onsubmit="return feedRepostController.onSubmit();">
+      <input type="hidden" name="original_id" id="feed-original-id">
       <div class="am-form-group">
         <label for="doc-ta-1">回复内容</label>
-        <textarea class="" rows="5" id="post-feed-content" name="content" placeholder="发表我观点..."></textarea>
+        <textarea class="" rows="5" id="post-feed-content" name="content" placeholder="转发内容..."></textarea>
       </div>
     </form>
   </div>
@@ -41,7 +41,7 @@
 
   <script>
     $(function(){
-      feedReplyController = new FeedReplyController();
+      feedRepostController = new FeedRepostController();
     });
   </script>
 </body>
