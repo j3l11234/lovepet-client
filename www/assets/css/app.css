@@ -7,13 +7,13 @@
 .feed-header, .feed-reply-header{
   /*padding-bottom: .5rem;*/
 }
-.feed-portrait, .feed-reply-portrait{
+.feed-portrait, .feed-reply-portrait, .profile-portrait{
   display: inline-block;
   width: 4.5rem;
   height: auto;
   margin-right: .5rem;
 }
-.feed-info,.feed-reply-info{
+.feed-info,.feed-reply-info, .profile-info{
   display: inline-block;
 }
 .feed-thumb{
@@ -31,4 +31,5 @@
   margin-bottom: .5rem;
   padding: .5rem;
 }
+
 

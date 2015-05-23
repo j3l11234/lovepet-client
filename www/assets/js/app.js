@@ -42,25 +42,9 @@ Date.prototype.format = function (mask){
   });
 };
 
-
-(function($) {
-  'use strict';
-
-  $(function() {
-    var $fullText = $('.admin-fullText');
-    $('#admin-fullscreen').on('click', function() {
-      $.AMUI.fullscreen.toggle();
-    });
-
-    $(document).on($.AMUI.fullscreen.raw.fullscreenchange, function() {
-      $.AMUI.fullscreen.isFullscreen ? $fullText.text('关闭全屏') : $fullText.text('开启全屏');
-    });
-  });
-})(jQuery);
-
-document.cookie ='JSESSIONID=2B49BD9489ED8F93A36D9B3ADDA8C9B5; Path=/'
-//var HOST = 'http://192.168.5.10:8080/lovepet';
-var HOST = 'http://127.0.0.1:8080/lovepet';
+//document.cookie ='JSESSIONID=59088A59680BC23690A26E18A15C6C10; Path=/'
+//var HOST = 'http://127.0.0.1:8080/lovepet';
+var HOST = 'http://172.31.34.184:8080/lovepet';
 var URL = {
   getProfileInfo: HOST + '/profile/getProfileInfo',
   user_login: HOST + '/user/login',
@@ -139,8 +123,15 @@ function CommonController(){
   }
 }
 
-var Profile = {
-  getProfileInfo : function() {
+
+function ProfileController(){
+  var profileInfo = null;
+
+  this.showProfileInfo = function() {
+    getProfileInfo();
+  };
+
+  var getProfileInfo = function(){
     $.ajax({
       type: 'post',
       url: URL.getProfileInfo ,
@@ -148,11 +139,11 @@ var Profile = {
         setTimeout(function(){
           if(data.error == RESPOND_CODE.OK){
             console.log(data.data);
-            //localStorage.setItem('', data.data);
-            //window.location.href = "login.html";
+            profileInfo = data.data;
+            renderProfileInfo();
           }else if(data.error == RESPOND_CODE.NOT_LOGIN){
             window.location.href = "login.html";
-          }else if(data.error == RESPOND_CODE.ERROR){
+          }else{
             commonController.showModalAlert('获取个人信息错误', data.data);
           }
         },0); 
@@ -160,9 +151,18 @@ var Profile = {
       error: commonController.ajaxError
       //, global: false // 可以禁止触发全局的Ajax事件
     });
-  },
+  };
 
-  onLogout: function(){
+  var renderProfileInfo = function(){
+    $('#profile-portrait').attr('src', HOST + profileInfo.portrait);
+    $('#profile-name').text(profileInfo.alias + ' (' + profileInfo.username + ')');
+    $('#profile-profile').text('个性签名: ' + profileInfo.profile);
+    $('#profile-feed-num').html(profileInfo.feedMum + '<br>动态');
+    $('#profile-fans-num').html(profileInfo.fansNum + '<br>粉丝');
+    $('#profile-follow-num').html(profileInfo.followNum + '<br>关注');
+  };
+
+  this.onLogout = function(){
     $.ajax({
       type: 'post',
       url: URL.user_logout ,
@@ -172,14 +172,14 @@ var Profile = {
             commonController.showModalAlert('注销成功', data.data, function(){
               window.location.href = "login.html";
             });
-          }else if(data.error == RESPOND_CODE.ERROR){
+          }else{
             commonController.showModalAlert('注销错误', data.data);
           }
         },0); 
       },
       error: commonController.ajaxError
     });
-  }
+  };
 };
 
 var Login = {
