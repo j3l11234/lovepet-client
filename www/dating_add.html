@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.form.js"></script>
+  <script src="assets/js/amazeui.min.js"></script>
+  <script src="assets/js/amazeui.widgets.helper.min.js"></script>
+  <script src="assets/js/app.js"></script>
+</head>
+<body>
+  <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+      <a href="javascript:history.back();" class="">
+        <i class="am-header-icon am-icon-chevron-left"></i>
+      </a>
+    </div>
+    <h1 class="am-header-title">
+      <a href="#title-link">发起相约</a>
+    </h1>
+    <div class="am-header-right am-header-nav">
+      <a href="javascript:$('#dating-add-form').submit();" class="">
+        <i class="am-header-icon am-icon-send-o"></i>
+      </a>
+    </div>
+  </header>
+  <div class="am-container am-margin-top">
+    <form class="am-form" id="dating-add-form" onsubmit="return datingAddController.onSubmit();">
+      <div class="am-form-group">
+        <label for="dating-add-time">时间</label>
+        <input type="text" class="" id="dating-add-time" name="time" placeholder="输入预约时间">
+      </div>
+      <div class="am-form-group">
+        <label for="dating-add-location">地点</label>
+        <input type="text" class="" id="dating-add-location" name="location" placeholder="输入预约地点">
+      </div>
+      <div class="am-form-group">
+        <label for="dating-add-pet">宠物</label>
+        <input type="text" class="" id="dating-add-pet" name="pet" placeholder="输入宠物">
+      </div>
+      <div class="am-form-group">
+        <label for="dating-add-content">动态内容</label>
+        <textarea class="" rows="5" id="dating-add-content" name="content" placeholder="预约内容"></textarea>
+      </div>
+    </form>
+  </div>
+  <script>
+    $(function(){
+      datingAddController = new DatingAddController();
+      datingAddController.getTimeText();
+    });
+  </script>
+</body>
+</html>

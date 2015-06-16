@@ -13,23 +13,44 @@
 </head>
 <body>
   <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+      <a href="javascript:history.back();" class="">
+        <i class="am-header-icon am-icon-chevron-left"></i>
+      </a>
+    </div>
     <h1 class="am-header-title">
-      <a href="#title-link">发现</a>
+      <a href="#title-link">相约遛狗</a>
     </h1>
+    <div class="am-header-right am-header-nav">
+      <a href="dating_add.html" class="">
+        <i class="am-header-icon am-icon-pencil"></i>
+      </a>
+    </div>
   </header>
 
- 
-
-
-  <nav data-am-widget="menu" class="am-menu  am-menu-stack">
-    <ul class="am-menu-nav am-avg-sm-1">
-      <li class=""><a href="dating.html" class="">相约遛狗</a></li>
-      <li class=""><a href="##" class="">颜值比拼</a></li>
-    </ul>
-  </nav>
-
-  <!--在这里编写你的代码-->
-
+  <div data-am-widget="list_news" class="am-list-news am-list-news-default am-no-layout">
+    <div class="am-list-news-bd">
+      <ul class="am-list" id="dating-list">
+      <!-->
+        <li class="am-list-item-desced" index="0">
+          <div class="feed-header">
+            <img src="http://127.0.0.1:8080/lovepet/upload/portrait/j3l11234.png" alt="portrait" class="am-img-thumbnail am-radius feed-portrait">
+            <div class="feed-info am-text-middle">
+              <h3 class="am-list-item-hd">j3l11234</h3>
+              <div class="am-list-item-text">2015-05-16 08:35:04</div>
+            </div>
+          </div>
+          <div class="am-list-main am-list-item-text feed-content">我要去遛狗，有人去嘛</div>
+          <span class="am-icon-github-square"> 萨摩耶</span>
+          <br>
+          <span class="am-icon-calendar"> 2015-05-16 08:35:04</span>
+          <br>
+          <span class="am-icon-location-arrow"> 北京交通大学</span>
+        </li>
+      </!-->
+      </ul>
+    </div>
+  </div>
 
   <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default ">
     <ul class="am-navbar-nav am-cf am-avg-sm-5">
@@ -67,7 +88,8 @@
   </div>
   <script>
     $(function(){
-      //Profile.getProfileInfo();
+      datingController = new DatingController();
+      datingController.getDatingList();
     });
   </script>
 </body>

@@ -42,9 +42,11 @@ Date.prototype.format = function (mask){
   });
 };
 
-//document.cookie ='JSESSIONID=59088A59680BC23690A26E18A15C6C10; Path=/'
-//var HOST = 'http://127.0.0.1:8080/lovepet';
-var HOST = 'http://172.31.34.184:8080/lovepet';
+
+document.cookie ='JSESSIONID=C1DBEDCF1A579EEF103723107A3231BF; Path=/'
+var HOST = 'http://127.0.0.1:8080/lovepet';
+//var HOST = 'http://172.31.34.184:8080/lovepet';
+
 var URL = {
   getProfileInfo: HOST + '/profile/getProfileInfo',
   user_login: HOST + '/user/login',
@@ -54,7 +56,9 @@ var URL = {
   feed_replyFeed: HOST + '/feed/replyFeed',
   feed_getFeedReply : HOST + '/feed/getFeedReply',
   feed_repostFeed : HOST + '/feed/repostFeed',
-  feed_favFeed : HOST + '/feed/favFeed'
+  feed_favFeed : HOST + '/feed/favFeed',
+  dating_addDating: HOST + '/dating/addDating',
+  dating_getDatingList: HOST + '/dating/getDatingList'
 }
 var RESPOND_CODE = {
   OK : 0,
@@ -607,9 +611,6 @@ function FeedRepostController(){
   };
 }
 
-
-
-
 var PostFeed = {
   onSubmit: function(){
     $.ajax({
@@ -636,6 +637,106 @@ var PostFeed = {
     return false;
   },
 };
+
+
+function DatingController(){
+  var _this = this; 
+  var $datingTpl = $('' +
+    '<li class="am-list-item-desced" index="0">' +
+    '  <div class="feed-header">' +
+    '    <img src="" alt="portrait" class="am-img-thumbnail am-radius dating-portrait">' +
+    '    <div class="dating-info am-text-middle">' +
+    '      <h3 class="am-list-item-hd"></h3>' +
+    '      <div class="am-list-item-text"></div>' +
+    '    </div>' +
+    '  </div>' +
+    '  <div class="am-list-main am-list-item-text dating-content"></div>' +
+    '  <span class="am-icon-github-square dating-pet"></span><br>' +
+    '  <span class="am-icon-calendar dating-time"></span>  <br>' +
+    '  <span class="am-icon-location-arrow dating-location"></span>' +
+    '</li>');
+
+  var datingList = null;
+
+  this.getDatingList = function(){
+    $.ajax({
+      type: 'post',
+      url: URL.dating_getDatingList,
+      success: function(data,status,jqXHR){
+        try{
+          setTimeout(function(){
+            if(data.error == RESPOND_CODE.OK){
+            datingList = data.data;
+            renderDating();
+          }else{
+            commonController.showModalAlert('获取错误', data.data);
+          }
+        },0);
+        }
+        catch(err){}
+      },
+      error: commonController.ajaxError
+    });
+    return false;
+  };
+
+
+  var renderDating = function(){
+    var $dating_list = $('#dating-list');
+    $dating_list.children().remove();
+    var length = datingList.length;
+    for (var i = 0 ; i < length; i++){
+      var dating = datingList[i];
+      var $dating = $datingTpl.clone();
+
+      $dating.attr('index', i);
+      var $dating_info = $dating.find('.dating-info');
+      $dating_info.find('.am-list-item-hd').text(dating.user.alias);
+      $dating_info.find('.am-list-item-text').text(new Date(dating.submitTime).format('yyyy-MM-dd HH:mm:ss'));
+      $dating.find('.dating-portrait').attr('src', HOST + dating.user.portrait);
+      $dating.find('.dating-content').text(dating.content);
+      $dating.find('.dating-pet').text(" "+dating.pet);
+      $dating.find('.dating-time').text(" "+new Date(dating.time).format('yyyy-MM-dd HH:mm:ss'));
+      $dating.find('.dating-location').text(" "+dating.location);
+
+      $dating_list.append($dating);
+    }
+  };
+}
+
+
+function DatingAddController(){
+  var _this = this;
+
+  this.getTimeText = function(){
+    $('#dating-add-time').val(new Date().format('yyyy-MM-dd HH:mm:ss'));
+  };
+
+  this.onSubmit = function(){
+    $.ajax({
+      type: 'post',
+      url: URL.dating_addDating,
+      data: $('#dating-add-form').serialize(),
+      success: function(data,status,jqXHR){
+        try{
+          setTimeout(function(){
+            if(data.error == RESPOND_CODE.OK){
+              commonController.showModalAlert('发布成功', data.data, function(){
+                history.back();
+              });
+            }else{
+              commonController.showModalAlert('发布错误', data.data);
+            }
+          },0);
+        }
+        catch(err){}
+      },
+      error: commonController.ajaxError
+    });
+    return false;
+  };
+}
+
 
 $(function(){
   commonController = new CommonController();
