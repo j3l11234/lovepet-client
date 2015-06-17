@@ -43,7 +43,7 @@ Date.prototype.format = function (mask){
 };
 
 
-document.cookie ='JSESSIONID=C1DBEDCF1A579EEF103723107A3231BF; Path=/'
+document.cookie ='JSESSIONID=C69359B485FCE85C1F37B86A4533F7EF; Path=/'
 var HOST = 'http://127.0.0.1:8080/lovepet';
 //var HOST = 'http://172.31.34.184:8080/lovepet';
 
@@ -52,6 +52,7 @@ var URL = {
   user_login: HOST + '/user/login',
   user_logout: HOST + '/user/logout',
   user_getUserInfo: HOST + '/user/getUserInfo',
+  user_followUser: HOST + '/user/followUser',
   feed_postFeed: HOST + '/feed/postFeed',
   feed_getFollowFeed: HOST + '/feed/getFollowFeed',
   feed_replyFeed: HOST + '/feed/replyFeed',
@@ -754,15 +755,6 @@ function UserInfoController(){
   var userInfo = null;
   var userId;
 
-  var init = function(){
-    userId = localStorage.getItem('userId');
-    localStorage.removeItem('userId');
-    if(!userId){
-      history.back();
-    }
-  };
-  init();
-
   this.showUserInfo = function() {
     getUserInfo();
   };
@@ -799,13 +791,45 @@ function UserInfoController(){
 
     $follow_btn = $('#user-info-follow-btn');
     if(userInfo.follow == 0){
-      $follow_btn.addClass('am-btn-primary').text('点击关注');
+      $follow_btn.removeClass('am-btn-danger').addClass('am-btn-primary').text('点击关注');
     }else{
-      $follow_btn.addClass('am-btn-danger').text('取消关注');
-    }
-
-    
+      $follow_btn.removeClass('am-btn-primary').addClass('am-btn-danger').text('取消关注');
+    }   
   };
+
+  var onFollowClick = function(){
+    $.ajax({
+      type: 'post',
+      url: URL.user_followUser,
+      data: {
+        'user_id': userId,
+      },
+      success: function(data,status,jqXHR){
+        try{
+          setTimeout(function(){
+            if(data.error == RESPOND_CODE.OK){
+              commonController.showModalAlert('提交成功', data.data);
+              getUserInfo();
+          }else{
+            commonController.showModalAlert('提交错误', data.data);
+          }
+        },0);
+        }
+        catch(err){}
+      },
+      error: commonController.ajaxError
+    });
+  }
+
+  var init = function(){
+    userId = localStorage.getItem('userId');
+    localStorage.removeItem('userId');
+    if(!userId){
+      history.back();
+    }
+    $('#user-info-follow-btn').click(onFollowClick);
+  };
+  init();
 };
 
 
