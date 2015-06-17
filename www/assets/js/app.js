@@ -51,6 +51,7 @@ var URL = {
   getProfileInfo: HOST + '/profile/getProfileInfo',
   user_login: HOST + '/user/login',
   user_logout: HOST + '/user/logout',
+  user_getUserInfo: HOST + '/user/getUserInfo',
   feed_postFeed: HOST + '/feed/postFeed',
   feed_getFollowFeed: HOST + '/feed/getFollowFeed',
   feed_replyFeed: HOST + '/feed/replyFeed',
@@ -153,7 +154,6 @@ function ProfileController(){
         },0); 
       },
       error: commonController.ajaxError
-      //, global: false // 可以禁止触发全局的Ajax事件
     });
   };
 
@@ -301,6 +301,18 @@ function FeedController(){
     window.location.href = "feed_detail.html";
   }
 
+  var onUserClick = function(){
+    event.stopPropagation();
+
+    var $img = $(event.target);
+    if($img.attr('data-user') === undefined){
+      return;
+    }
+    localStorage.setItem('userId', $img.attr('data-user'));
+
+    window.location.href = "user_info.html";
+  }
+
   var onReplyClick = function(event){
     event.stopPropagation();
     var index = $(event.target).parent().parent().attr('index');
@@ -355,7 +367,7 @@ function FeedController(){
       var $feed_info = $feed.find('.feed-info');
       $feed_info.find('.am-list-item-hd').text(feed.user.alias);
       $feed_info.find('.am-list-item-text').text(new Date(feed.submitTime).format('yyyy-MM-dd HH:mm:ss'));
-      $feed.find('.feed-portrait').attr('src', HOST + feed.user.portrait);
+      $feed.find('.feed-portrait').attr('src', HOST + feed.user.portrait).attr('data-user',feed.user.id).click(onUserClick);
       $feed.find('.feed-content').text(feed.content);
       $feed.find('.feed-reply').text('评论' + ' (' + feed.replyNum + ')').click(onReplyClick);
       $feed.find('.feed-repost').text('转发' + ' (' + feed.repostNum + ')').click(onRepostClick);
@@ -376,7 +388,7 @@ function FeedController(){
         $origin_feed.find('.feed-portrait').attr('src', HOST + origin_feed.user.portrait);
         $origin_feed.find('.feed-content').text(origin_feed.content);
         if(origin_feed.photo){
-          $origin_feed.find('.feed-thumb').attr('src', HOST + origin_feed.photo);
+          $origin_feed.find('.feed-thumb').attr('src', HOST + origin_feed.photo).attr('data-user',origin_feed.user.id).click(onUserClick);;
         }else{
           $origin_feed.find('.feed-thumb').remove();
         }
@@ -736,6 +748,65 @@ function DatingAddController(){
     return false;
   };
 }
+
+
+function UserInfoController(){
+  var userInfo = null;
+  var userId;
+
+  var init = function(){
+    userId = localStorage.getItem('userId');
+    localStorage.removeItem('userId');
+    if(!userId){
+      history.back();
+    }
+  };
+  init();
+
+  this.showUserInfo = function() {
+    getUserInfo();
+  };
+
+  var getUserInfo = function(){
+    $.ajax({
+      type: 'post',
+      url: URL.user_getUserInfo,
+      data: {
+        'user_id': userId,
+      },
+      success: function(data,status,jqXHR){
+        setTimeout(function(){
+          if(data.error == RESPOND_CODE.OK){
+            console.log(data.data);
+            userInfo = data.data;
+            renderUserInfo();
+          }else{
+            commonController.showModalAlert('获取个人资料错误', data.data);
+          }
+        },0); 
+      },
+      error: commonController.ajaxError
+    });
+  };
+
+  var renderUserInfo = function(){
+    $('#user-info-portrait').attr('src', HOST + userInfo.portrait);
+    $('#user-info-name').text(userInfo.alias + ' (' + userInfo.username + ')');
+    $('#user-info-profile').text('个性签名: ' + userInfo.profile);
+    $('#user-info-feed-num').html(userInfo.feedMum + '<br>动态');
+    $('#user-info-fans-num').html(userInfo.fansNum + '<br>粉丝');
+    $('#user-info-follow-num').html(userInfo.followNum + '<br>关注');
+
+    $follow_btn = $('#user-info-follow-btn');
+    if(userInfo.follow == 0){
+      $follow_btn.addClass('am-btn-primary').text('点击关注');
+    }else{
+      $follow_btn.addClass('am-btn-danger').text('取消关注');
+    }
+
+    
+  };
+};
 
 
 $(function(){

@@ -13,8 +13,13 @@
 </head>
 <body>
   <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+      <a href="javascript:history.back();" class="">
+        <i class="am-header-icon am-icon-chevron-left"></i>
+      </a>
+    </div>
     <h1 class="am-header-title">
-      <a href="#title-link">个人中心</a>
+      <a href="#title-link">个人资料</a>
     </h1>
   </header>
 
@@ -23,81 +28,34 @@
       <ul class="am-list">
         <li class="am-g am-list-item-desced">
         <div class="am-text-middle">
-          <img src="" alt="portrait" class="am-img-thumbnail am-radius profile-portrait" id="profile-portrait"/>
+          <img src="" alt="portrait" class="am-img-thumbnail am-radius profile-portrait" id="user-info-portrait"/>
           <div class="am-text-middle profile-info" >
-            <h3 class="am-list-item-hd" id="profile-name">j3l11234</h3>
-            <div class="am-list-item-text" id="profile-profile">个性签名:XXXX</div>
+            <h3 class="am-list-item-hd" id="user-info-name">j3l11234</h3>
+            <div class="am-list-item-text" id="user-info-profile">个性签名:XXXX</div>
           </div>
+          <button type="button" class="am-btn" id="user-info-follow-btn" style="float: right;
+  margin-right: 10px;"></button>
         </div>
         </li>
       </ul>
     </div>
   </div>
   <div class="am-btn-group am-btn-group-justify am-padding-horizontal">
-    <button type="button" class="am-btn am-btn-default" id="profile-feed-num">
+    <button type="button" class="am-btn am-btn-default" id="user-info-feed-num">
       999<br>动态
     </button>
-    <button type="button" class="am-btn am-btn-default" id="profile-fans-num">
+    <button type="button" class="am-btn am-btn-default" id="user-info-fans-num">
       999<br>粉丝
     </button>
-    <button type="button" class="am-btn am-btn-default" id="profile-follow-num">
+    <button type="button" class="am-btn am-btn-default" id="user-info-follow-num">
       999<br>关注
     </button>
   </div>
-  <br>
-  <nav data-am-widget="menu" class="am-menu  am-menu-stack">
-    <ul class="am-menu-nav am-avg-sm-1">
-      <li class=""><a href="##" class="">我的收藏</a></li>
-      <li class=""><a href="##" class="">我的相册</a></li>
-      <li class=""><a href="##" class="">我的好友</a></li>
-    </ul>
-    <br>
-    <ul class="am-menu-nav am-avg-sm-1">
-      <li class=""><a href="##" class="" onclick="profileController.onLogout()">注销</a></li>
-    </ul>
-  </nav>
 
-  <!--在这里编写你的代码-->
-
-
-  <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default ">
-    <ul class="am-navbar-nav am-cf am-avg-sm-5">
-      <li>
-        <a href="news.html" class="">
-          <span class="am-icon-newspaper-o"></span>
-          <span class="am-navbar-label">资讯</span>
-        </a>
-      </li>
-      <li>
-        <a href="feed.html" class="">
-          <span class="am-icon-pencil"></span>
-          <span class="am-navbar-label">动态</span>
-        </a>
-      </li>
-      <li>
-        <a href="message.html" class="">
-          <span class="am-icon-comment"></span>
-          <span class="am-navbar-label">消息</span>
-        </a>
-      </li>
-      <li>
-        <a href="discover.html" class="">
-          <span class="am-icon-send"></span>
-          <span class="am-navbar-label">发现</span>
-        </a>
-      </li>
-      <li>
-        <a href="profile.html" class="am-active">
-          <span class="am-icon-user"></span>
-          <span class="am-navbar-label">我的</span>
-        </a>
-      </li>
-    </ul>
-  </div>
   <script>
     $(function(){
-      profileController = new ProfileController();
-      profileController.showProfileInfo();
+      userInfoController = new UserInfoController();
+      userInfoController.showUserInfo();
     });
   </script>
 </body>
