@@ -43,9 +43,9 @@ Date.prototype.format = function (mask){
 };
 
 
-document.cookie ='JSESSIONID=C69359B485FCE85C1F37B86A4533F7EF; Path=/'
-var HOST = 'http://127.0.0.1:8080/lovepet';
-//var HOST = 'http://172.31.34.184:8080/lovepet';
+//document.cookie ='JSESSIONID=C69359B485FCE85C1F37B86A4533F7EF; Path=/'
+//var HOST = 'http://127.0.0.1:8080/lovepet';
+var HOST = 'http://lovepet.oschina.mopaas.com';
 
 var URL = {
   getProfileInfo: HOST + '/profile/getProfileInfo',
@@ -832,6 +832,83 @@ function UserInfoController(){
   init();
 };
 
+function FaceGameController(){
+  var _this = this;
+  var MAX_RANDOM_POLL = 100;
+  var faceData = [
+  {
+    name: '小贝',
+    img:'/assets/img/pet01.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '虎虎',
+    img:'/assets/img/pet02.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '混混',
+    img:'/assets/img/pet03.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '达达妹',
+    img:'/assets/img/pet04.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '麒麟',
+    img:'/assets/img/pet05.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '黑妮',
+    img:'/assets/img/pet06.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '波利',
+    img:'/assets/img/pet07.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '李小熊',
+    img:'/assets/img/pet08.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '蓝莓',
+    img:'/assets/img/pet09.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  },
+  {
+    name: '阿郎',
+    img:'/assets/img/pet10.jpg',
+    poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
+  }];
+
+  this.choicePair = function(){
+    var index1 = Math.floor(Math.random()*faceData.length);
+    var index2 = Math.floor(Math.random()*(faceData.length -1));
+    if(index2 >= index1){
+      index2++;
+    }
+    $('#player1-img').attr('src',faceData[index1].img);
+    $('#player1-name').text(faceData[index1].name);
+    $('#player1-poll').text(faceData[index1].poll);
+    $('#player2-img').attr('src',faceData[index2].img);
+    $('#player2-name').text(faceData[index2].name);
+    $('#player2-poll').text(faceData[index2].poll);
+  }
+
+  this.onPollClick = function(btn){
+    $btn = $(btn);
+    $btn.addClass("am-animation-scale-down");
+    setTimeout(function(){
+      $btn.removeClass("am-animation-scale-down");
+    },500);
+  }
+}
 
 $(function(){
   commonController = new CommonController();

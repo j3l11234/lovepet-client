@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.form.js"></script>
+  <script src="assets/js/amazeui.min.js"></script>
+  <script src="assets/js/amazeui.widgets.helper.min.js"></script>
+  <script src="assets/js/app.js"></script>
+</head>
+<body>
+  <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+      <a href="javascript:history.back();" class="">
+        <i class="am-header-icon am-icon-chevron-left"></i>
+      </a>
+    </div>
+    <h1 class="am-header-title">
+      <a href="#title-link">颜值比拼</a>
+    </h1>
+  </header>
+
+  <br>
+  <div class="am-g">
+    <div class="am-u-sm-9 am-text-center">
+    <h3>快来选择颜值更高的宠物吧！</h3>
+    </div>
+    <div class="am-u-sm-3 am-text-center">
+      <button type="button" class="am-btn am-btn-info am-radius" onclick="faceGameController.choicePair();">下一组</button>
+    </div>
+  </div>
+  <br>
+  <div class="am-g">
+    <div class="am-u-sm-6 am-text-center">
+      <img class="am-radius face-img" id="player1-img" src="" width="200" height="200" />
+      <br>
+      <h6>
+        <span id="player1-name"></span>
+        <span id="player1-poll" class="am-badge am-badge-success am-radius"></span>
+      </h6>
+      <button type="button" class="am-btn am-btn-primary am-text-sm am-radius am-text-sm am-animation-reverse" onclick="faceGameController.onPollClick(this)">支持Ta</button>
+    </div>
+    <div class="am-u-sm-6 am-text-center">
+      <img class="am-radius face-img" id="player2-img" src="" width="200" height="200" />
+      <br>
+      <h6>
+        <span id="player2-name"></span>
+        <span id="player2-poll" class="am-badge am-badge-success am-radius am-text-sm"></span>
+      </h6>
+      <button type="button" class="am-btn am-btn-primary am-text-sm am-radius am-text-sm am-animation-reverse" onclick="faceGameController.onPollClick(this)">支持Ta</button>
+    </div>
+  </div>
+  <script>
+    $(function(){
+      faceGameController = new FaceGameController();
+      faceGameController.choicePair();
+    });
+  </script>
+</body>
+</html>
