@@ -838,52 +838,52 @@ function FaceGameController(){
   var faceData = [
   {
     name: '小贝',
-    img:'/assets/img/pet01.jpg',
+    img:'assets/img/pet01.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '虎虎',
-    img:'/assets/img/pet02.jpg',
+    img:'assets/img/pet02.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '混混',
-    img:'/assets/img/pet03.jpg',
+    img:'assets/img/pet03.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '达达妹',
-    img:'/assets/img/pet04.jpg',
+    img:'assets/img/pet04.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '麒麟',
-    img:'/assets/img/pet05.jpg',
+    img:'assets/img/pet05.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '黑妮',
-    img:'/assets/img/pet06.jpg',
+    img:'assets/img/pet06.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '波利',
-    img:'/assets/img/pet07.jpg',
+    img:'assets/img/pet07.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '李小熊',
-    img:'/assets/img/pet08.jpg',
+    img:'assets/img/pet08.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '蓝莓',
-    img:'/assets/img/pet09.jpg',
+    img:'assets/img/pet09.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   },
   {
     name: '阿郎',
-    img:'/assets/img/pet10.jpg',
+    img:'assets/img/pet10.jpg',
     poll: Math.floor(Math.random()*MAX_RANDOM_POLL)
   }];
 
