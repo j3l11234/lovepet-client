@@ -3,17 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
   <link rel="stylesheet" href="assets/css/amazeui.min.css">
   <link rel="stylesheet" href="assets/css/app.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.form.js"></script>
+  <script src="assets/js/amazeui.min.js"></script>
+  <script src="assets/js/amazeui.widgets.helper.min.js"></script>
+  <script src="assets/js/app.js"></script>
 </head>
 <body>
-  <p>
-    Hello Amaze UI.
-  </p>
 
-  <!--在这里编写你的代码-->
+  <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
+    <div class="am-header-left am-header-nav">
+      <a href="#" class="">
+        <i class="am-header-icon am-icon-refresh"></i>
+      </a>
+    </div>
+    <h1 class="am-header-title">
+      <a href="#title-link">消息列表</a>
+    </h1>
+    <div class="am-header-right am-header-nav">
+      <a href="message_post.html" class="">
+        <i class="am-header-icon am-icon-pencil"></i>
+      </a>
+    </div>
+  </header>
 
+  <div data-am-widget="list_news" class="am-list-news am-list-news-default">
+    <div class="am-list-news-bd">
+      <ul class="am-list" id="message-list">
+        <li class="am-list-item-desced"> 
+          <div class="feed-header"> 
+            <img src="http://lovepet.oschina.mopaas.com/upload/portrait/j3l11234.png" alt="portrait" class="am-img-thumbnail am-radius feed-portrait" data-user="2" /> 
+            <div class="feed-info am-text-middle"> 
+              <h3 class="am-list-item-hd">j3l11234</h3> 
+              <div class="am-list-item-text">2015-05-16 08:35:04</div> 
+            </div> 
+          </div> 
+          <div class="am-list-main am-list-item-text feed-content">测试消息</div>
+        </li>
+        <li class="am-list-item-desced"> 
+          <div class="feed-header"> 
+            <img src="http://lovepet.oschina.mopaas.com/upload/portrait/ymy.jpg" alt="portrait" class="am-img-thumbnail am-radius feed-portrait" data-user="2" /> 
+            <div class="feed-info am-text-middle"> 
+              <h3 class="am-list-item-hd">杨梦月</h3> 
+              <div class="am-list-item-text">2015-05-17 04:23:11</div> 
+            </div> 
+          </div> 
+          <div class="am-list-main am-list-item-text feed-content">开会呀</div>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default ">
     <ul class="am-navbar-nav am-cf am-avg-sm-5">
